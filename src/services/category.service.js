@@ -37,6 +37,7 @@ exports.getCateogries = async ()=>{
 }
 
 exports.getCategoryById = async (id)=>{
+    console.log("THis is ID - ", id);
     try{
         const category= await Category.findById(id);
         if(category){return category;}

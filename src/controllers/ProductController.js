@@ -1,5 +1,6 @@
 const response = require('../utils/responseHelpers');
 const {productService}=require('../services');
+const {categoryService}=require('../services');
 
 
 const getproduct = async (req,res)=>{
@@ -19,23 +20,50 @@ const getproduct = async (req,res)=>{
 
 const addProduct = async (req,res)=>{
     try{
-        const {name,image,countInStock} = req.body ;
-        if( !name || !image || !countInStock){
+        const {
+            name,description,richDescription,image,brand,price,category,countInStock,rating,numOfReviews,isFeatured
+        } 
+        = req.body ;
+        
+        if( !name || !description || !category || !countInStock){
             return response.badRequest(res,"Incomplete Product details");
         }
 
-        const newProduct = await productService.addProduct(name,image,countInStock);
-        if(!newProduct){
-            return response.badRequest(res,"Product cannot be listed");
+        const findCategory= await categoryService.getCategoryById(category);
+        if(!findCategory){
+            return response.badRequest(res,"Category Not Found");
         }
-        return response.success(res,"Producted Listed Successfully", {Product:newProduct});
+
+        const newProduct = await productService.addProduct(
+            name,description,richDescription,image,brand,price,category,countInStock,rating,numOfReviews,isFeatured
+        );
+        if(!newProduct){
+            return response.badRequest(res,"Product Cannot Be Created");
+        }
+        return response.success(res,"Producted Created Successfully", {Product:newProduct});
     }
     catch(error){
         return response.serverError(res, error)
     }
-};
+}
+
+
+const getProductById = async (req,res)=>{
+    try{
+        const id = req.params.id;
+        const getProduct = await productService.getProductById(id);
+        if(!getProduct){
+            return response.badRequest(res,"Product Not Found");
+        }
+        return response.success(res,"Product Found Successfully",{Product:getProduct});
+    }
+    catch(err){
+        return response.serverError(res,err);
+    }
+}
 
 module.exports={
     getproduct,
-    addProduct
+    addProduct,
+    getProductById
 }
