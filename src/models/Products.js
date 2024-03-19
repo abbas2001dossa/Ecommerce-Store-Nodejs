@@ -68,5 +68,15 @@ const ProductsSchema = new mongoose.Schema({
 });
 
 
+// to send response in api instead of as id as well with _id ! For better frontend ease. 
+ProductsSchema.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+ProductsSchema.set('toJSON',{
+    virtuals:true
+});
+
+
 const Product = mongoose.model("Product",ProductsSchema);
 module.exports = Product;
