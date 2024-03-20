@@ -21,6 +21,8 @@ app.use(morgan('tiny'));
 const api= process.env.API_URL;
 // api is -- /api/v1
 
+const userRoutes = require('./routes/UserRoute');
+app.use(`${api}/user`,userRoutes);
 
 const productRoutes = require('./routes/ProductRoute');
 app.use(`${api}/products` , productRoutes);
