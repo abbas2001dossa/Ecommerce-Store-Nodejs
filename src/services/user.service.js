@@ -1,7 +1,7 @@
 const User = require('../models/User');
+const passwordUtils=require('../utils/passwordUtils');
 
-
-exports.registerUser = async (name,email,passwordHash,phone,isAdmin,apartment,zip,city,country,street)=>{
+exports.register = async (name,email,passwordHash,phone,isAdmin,apartment,zip,city,country,street)=>{
     try{
         const newUser = new User({
             name:name?name:null,
@@ -24,8 +24,8 @@ exports.registerUser = async (name,email,passwordHash,phone,isAdmin,apartment,zi
     }
 };  
 
-exports.getUsers = async ()=>{
-    const users =await User.find();
+exports.findUsers = async ()=>{
+    const users =await User.find().select('-passwordHash');
     if(users.length > 0 ){
         return users;
     }
@@ -33,13 +33,36 @@ exports.getUsers = async ()=>{
 }
 
 
-
-
-exports.getUserById= async (id)=>{
+exports.findUserByEmail = async (email)=>{
     try{
-        const user = await user.findById(id);
+        const user = await User.findOne({ email: email });
+        if(user){return user;}
+        return null;
+    }
+    catch(err){
+        return null
+    }
+}
+
+exports.findUserById= async (id)=>{
+    try{
+        const user = await User.findById(id).select('-passwordHash');
+        console.log(user);
         if(user){return user;}
         return null;
     }
     catch(err){return null;}
+}
+
+
+exports.verifyUser = async (password,findUser)=>{
+    try{    
+        if(passwordUtils.comparePassword(password,findUser.passwordHash)){
+            return findUser;
+        }
+        return null;
+    }
+    catch(err){
+        return null;
+    }
 }
