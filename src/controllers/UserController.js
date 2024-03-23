@@ -133,9 +133,8 @@ const updateUser = async (req,res)=>{
 
 const changePassword = async (req,res)=>{
     try{
-        console.log("Hello")
         const {email,oldPassword,newPassword}=req.body;
-
+        
         const findUser = await userService.findUserByEmail(email);
         if(!findUser){
             return response.notFound(res,"User Not Found");
@@ -146,7 +145,7 @@ const changePassword = async (req,res)=>{
             return response.badRequest(res,"Incorrect Password ");
         }
 
-        const changePass = await userService.updateUser(findUser,newPassword);
+        const changePass = await userService.updatePassword(findUser,newPassword);
         if(!changePass){
             return response.badRequest(res,"Password Cannot Be Changed");
         }
@@ -167,7 +166,7 @@ const deleteUser= async (req,res)=>{
             return response.notFound(res,"User Not Found");
         }
 
-        const deleteUser = await userService.deleteUser(id);
+        const deleteUser = await userService.removeUser(id);
         if(!deleteUser){
             return response.badRequest("User Cannot Be Deleted");
         } 

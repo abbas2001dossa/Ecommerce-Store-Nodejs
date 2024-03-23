@@ -30,6 +30,9 @@ app.use(`${api}/products` , productRoutes);
 const categoryRoutes = require('./routes/CategoryRoute');
 app.use(`${api}/categories`,categoryRoutes);
 
+const orderRoutes = require('./routes/OrderRoute');
+app.use(`${api}/orders`,orderRoutes);
+
 
 // connection to mongodb
 const connectToMongoDb=require('./Connection');

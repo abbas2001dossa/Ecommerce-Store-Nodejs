@@ -35,6 +35,7 @@ exports.findUsers = async ()=>{
 
 exports.findUserByEmail = async (email)=>{
     try{
+        console.log(email)
         const user = await User.findOne({ email: email });
         if(user){return user;}
         return null;
@@ -109,7 +110,7 @@ exports.updateUser = async (id,name,phone,isAdmin,apartment,zip,city,country,str
 
 
 // update password
-const updatePassword =async (findUser,newPassword)=>{
+exports.updatePassword =async (findUser,newPassword)=>{
     try{
         const passwordHash = passwordUtils.generateHash(newPassword);
         const updateUser = await User.findByIdAndUpdate(
@@ -128,7 +129,7 @@ const updatePassword =async (findUser,newPassword)=>{
     }
 }
 
-const deleteUser= async (id)=>{
+exports.removeUser= async (id)=>{
     try{
         const del = await User.findByIdAndDelete(id);
         if(del){return del;}
