@@ -66,3 +66,73 @@ exports.verifyUser = async (password,findUser)=>{
         return null;
     }
 }
+
+exports.countUser = async ()=>{
+    try{
+        const countU = await User.countDocuments({});
+        
+        if(countU){
+            return countU;
+        }
+        return null;
+    
+    }
+    catch(err){
+        return null;
+    }
+}
+
+exports.updateUser = async (id,name,phone,isAdmin,apartment,zip,city,country,street)=>{
+    try{
+        const update = await User.findByIdAndUpdate(
+        id,
+        {
+            name:name,
+            phone:phone,
+            isAdmin:isAdmin,
+            street:street,
+            apartment:apartment,
+            zip:zip,
+            city:city,
+            country:country
+        },
+        {new:true}        
+        ).select('-passwordHash');
+
+        if(update){return update;}
+        return null;
+    }
+    catch(err){
+        return null;
+    }
+}
+
+
+// update password
+const updatePassword =async (findUser,newPassword)=>{
+    try{
+        const passwordHash = passwordUtils.generateHash(newPassword);
+        const updateUser = await User.findByIdAndUpdate(
+            findUser.id,
+            {
+                passwordHash:passwordHash
+            },
+            {new:true}
+        );
+
+        if(updateUser){return updateUser;}
+        return null;
+    }
+    catch(err){
+        return null;
+    }
+}
+
+const deleteUser= async (id)=>{
+    try{
+        const del = await User.findByIdAndDelete(id);
+        if(del){return del;}
+        return null;
+    }
+    catch(err){return null;}
+}

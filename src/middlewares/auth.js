@@ -2,6 +2,15 @@ const jwt=require('jsonwebtoken');
 const response = require('../utils/responseHelpers');
 const TOKEN_SECRET=process.env.TOKEN_SECRET;
 
+
+async function isRevoked(req,payload,done){
+    if(!payload.isAdmin){
+        done(null,true);
+    }
+    done();
+}
+
+
 const verifyToken = (req, res, next) => {
     var token = req.headers['authorization']; 
     if (!token) {
@@ -11,6 +20,9 @@ const verifyToken = (req, res, next) => {
     token = token.replace(/^Bearer\s+/, "");
     try {
         const decoded = jwt.verify(token, TOKEN_SECRET);
+        if(!decoded.isAdmin){
+            return response.authError(res,"Unauthorized Request"); // request only meant for admins 
+        }
         req.user = decoded;
         
     } catch (error) {
@@ -18,5 +30,7 @@ const verifyToken = (req, res, next) => {
     }
     return next();
 }
+
+
 
 module.exports = verifyToken;
