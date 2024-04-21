@@ -128,11 +128,25 @@ const getTotalSales = async (req,res)=>{
     }
 }
 
+const getTotalCount=async (req,res)=>{
+    try{
+        const countT = await orderService.getCount();
+        if(!countT){
+            return response.badRequest(res,"Count Could Not Be Calculated");
+        }
+        return response.success(res,"Count Calculated ",{Count:countT});
+    }
+    catch(err){
+        return response.serverError(res,err);
+    }
+}
+
 module.exports={
     getOrder,
     createOrder,
     getOrderById,
     acceptOrder,
     deleteOrder,
-    getTotalSales
+    getTotalSales,
+    getTotalCount
 }

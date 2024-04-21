@@ -10,5 +10,6 @@ router.get('/get/:id',verifyToken,orderController.getOrderById);
 router.put('/acceptOrder/:id',verifyToken,orderController.acceptOrder);
 router.delete('/:id',verifyToken,orderController.deleteOrder);
 router.get('/totalSales',verifyToken,orderController.getTotalSales);  // asdmin panel 
+router.get('/count',verifyToken,orderController.getTotalCount);
 
 module.exports = router;

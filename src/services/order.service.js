@@ -132,3 +132,14 @@ exports.totalSales=async ()=>{
         return null;
     }
 }
+
+exports.getCount = async ()=>{
+  try{
+      const c = Order.countDocuments({});
+      if(c){return c;}
+      return null;
+  }
+  catch(err){
+    return null;
+  }
+}
