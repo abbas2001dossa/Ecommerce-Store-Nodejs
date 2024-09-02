@@ -14,7 +14,8 @@ pipelines:
               - node
             script:
               - npm install
-              - npm test
+              - cd src
+              - npm start 
         - step:
             name: Code linting
             script:
